@@ -90,7 +90,7 @@ public class SelectionTool: DrawingTool {
       let startPoint = startPoint else
     {
       isDraggingShape = false
-        return
+      return
     }
     let delta = CGPoint(x: point.x - startPoint.x, y: point.y - startPoint.y)
     selectedShape.transform = originalTransform.translated(by: delta)

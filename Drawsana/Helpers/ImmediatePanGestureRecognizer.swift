@@ -9,6 +9,23 @@
 import UIKit
 import UIKit.UIGestureRecognizerSubclass
 
+/**
+ Replaces a tap gesture recognizer and a pan gesture recognizer with just one
+ gesture recognizer.
+
+ Lifecycle:
+ * Touch begins, state -> .began (all other touches are completely ignored)
+ * Touch moves, state -> .changed
+ * Touch ends
+   * If touch moved more than 10px away from the origin at some point, then
+     `hasExceededTapThreshold` was set to `true`. Target may use this to
+     distinguish a pan from a tap when the gesture has ended and act
+     accordingly.
+
+ This behavior is better than using a regular UIPanGestureRecognizer because
+ that class ignores the first ~20px of the touch while it figures out if you
+ "really" want to pan. This is a drawing program, so that's not good.
+ */
 class ImmediatePanGestureRecognizer: UIGestureRecognizer {
   var tapThreshold: CGFloat = 10
   // If gesture ends and this value is `true`, then the user's finger moved
@@ -30,7 +47,10 @@ class ImmediatePanGestureRecognizer: UIGestureRecognizer {
   }
 
   override func location(in view: UIView?) -> CGPoint {
-    return lastPoint
+    guard let view = view else {
+      return lastPoint
+    }
+    return view.convert(lastPoint, to: view)
   }
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
