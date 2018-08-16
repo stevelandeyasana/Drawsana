@@ -30,7 +30,7 @@ class ImmediatePanGestureRecognizer: UIGestureRecognizer {
   var tapThreshold: CGFloat = 10
   // If gesture ends and this value is `true`, then the user's finger moved
   // more than `tapThreshold` points during the gesture, i.e. it is not a tap.
-  var hasExceededTapThreshold = false
+  private(set) var hasExceededTapThreshold = false
 
   private var startPoint: CGPoint = .zero
   private var lastLastPoint: CGPoint = .zero
